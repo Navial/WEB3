@@ -5,8 +5,8 @@ const Button = ({
     delta
 }) => {
     const handleClick = (e) => {
-        const deltaAttribute = e.target.dataset.delta;
-        const delta = parseInt(deltaAttribute);
+        // const deltaAttribute = e.target.dataset.delta;
+        // const delta = parseInt(deltaAttribute);
         changeCount(delta);
     }
 
