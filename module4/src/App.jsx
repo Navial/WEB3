@@ -1,38 +1,49 @@
-/* eslint-disable no-unused-vars */
-import { useState } from "react";
-
-import Person from "./Person";
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import Contact from "./Contact";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {
-      id: 1,
-      name: "Arto Hellas",
-      number: "0479487183"
-    },
-  ]);
+  const [contacts, setContacts] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
-  const addPerson = (e) => {
+  const hook = () => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/contacts')
+      .then(response => {
+        console.log('promise fulfilled')
+        setContacts(response.data)
+      })
+  };
+
+  useEffect(hook, []);
+
+  console.log('render', contacts.length, 'contacts')
+
+  const addContact = (e) => {
     e.preventDefault();
-    const personObject = {
-      id: persons.length + 1,
+    const contactObject = {
+      id: contacts.length + 1,
       name: newName,
-      number: newNumber,
+      phone_number: newNumber,
       favorite: Math.random() < 0.5,
     };
 
-    if (persons.some((person) => person.name === newName)) {
+    if (contacts.some((conctact) => conctact.name === newName)) {
         alert(`${newName} is already added to phonebook`);
       } else {
-        setPersons(persons.concat(personObject));
-        setNewName("");
-        setNewNumber("");
+        axios
+        .post('http://localhost:3001/contacts', contactObject)
+        .then(response => {
+          setContacts(contacts.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+        })
       }
   };
 
-  const handlerPersonChange = (e) => {
+  const handlerContactChange = (e) => {
     setNewName(e.target.value);
   };
 
@@ -44,9 +55,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addPerson}>
+      <form onSubmit={addContact}>
         <div>
-          name: <input value={newName} onChange={handlerPersonChange} />
+          name: <input value={newName} onChange={handlerContactChange} />
         </div>
         <div>
             number: <input value={newNumber} onChange={handlerNumberChange} />
@@ -58,8 +69,8 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map((person) => (
-          <Person key={person.id} name={person.name} number={person.number}/>
+        {contacts.map((contact) => (
+          <Contact key={contact.id} name={contact.name} number={contact.phone_number}/>
         ))}
       </ul>
     </div>

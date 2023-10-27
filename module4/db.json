@@ -1,0 +1,28 @@
+{
+  "contacts": [
+    {
+      "id": 1,
+      "name": "Jhon Doe",
+      "phone_number": "052-029-983",
+      "favorite": true
+    },
+    {
+      "id": 2,
+      "name": "Victor Denis",
+      "phone_number": "125-635-924",
+      "favorite": true
+    },
+    {
+      "id": 3,
+      "name": "Alexis Denis",
+      "phone_number": "784-237-257",
+      "favorite": true
+    },
+    {
+      "id": 4,
+      "name": "resr",
+      "phone_number": "esr23",
+      "favorite": false
+    }
+  ]
+}
