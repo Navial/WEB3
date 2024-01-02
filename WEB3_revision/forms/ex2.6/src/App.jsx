@@ -1,14 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import personService from './services/persons.jsx'
+import Person from './components/Person.jsx'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      number: '040-1234567'
-    }
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newPerson, setNewPerson] = useState({
     name : '',
     number: ''
+  })
+
+  useEffect(() => { 
+    personService
+      .getAll()
+      .then(response => {
+        setPersons(response.data)
+      }),
+      []
   })
 
   const addPerson = (event) => {
@@ -21,11 +28,20 @@ const App = () => {
         return
       }
     })
+
     const personObject = {
+      id: persons.length + 1,
       name: newPerson.name,
       number: newPerson.number,
     }
-    present ? setNewPerson('') : setPersons(persons.concat(personObject));
+
+    if(!present) {
+      personService
+        .create(personObject) 
+        .then(response => {
+          setPersons(persons.concat(response.data))
+        })
+    }
   }
 
   const handleNameChange = (event) => {
@@ -34,6 +50,14 @@ const App = () => {
   
   const handleNumberChange = (event) => {
     setNewPerson({ ...newPerson, number: event.target.value });
+  }
+
+  const deletePerson = (id) => {
+    personService
+      .remove(id)
+      .then(response => {
+        setPersons(persons.map(person => person.id !== id ? person : response.data))
+      })    
   }
 
   return (
@@ -53,7 +77,11 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {persons.map(person => 
-          <li key={person.name}>{person.name} : {person.number}</li>
+          <Person key={person.id} 
+                  id={person.id} 
+                  name={person.name} 
+                  number={person.number} 
+                  deletePerson={deletePerson}/>
         )}
       </ul>
     </div>
