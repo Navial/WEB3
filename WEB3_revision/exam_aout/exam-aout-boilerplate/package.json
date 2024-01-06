@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "mongoose": "^8.0.3"
+  },
+  "name": "exam-aout-boilerplate",
+  "description": "## Base de données",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
